@@ -23,9 +23,8 @@ class Solution extends $Solution {
   part2() {
     final contents = input.readAsStringSync();
 
-    final byDont = contents.split("don't()");
+    final [firstSection, ...byDont] = contents.split("don't()");
 
-    final firstSection = byDont.removeAt(0);
     final safeSections = [firstSection];
 
     for (final section in byDont) {
