@@ -4,7 +4,7 @@ import 'dart:io';
 import "package:path/path.dart" show posix;
 
 extension on Future<String> {
-  Future<String> stringifyError() => onError((e, _) => e.toString());
+  Future<Result> wrapError() => then<Result>(Ok.new).onError(Err.new);
 }
 
 final dir = posix.dirname(Platform.script.path);
@@ -18,12 +18,45 @@ final input = File(posix.join(relativeDir, 'input.txt'));
 final output1 = File(posix.join(relativeDir, 'output1.txt'));
 final output2 = File(posix.join(relativeDir, 'output2.txt'));
 
+sealed class Result {}
+
+class Ok implements Result {
+  Ok(this.value);
+  final String value;
+
+  @override
+  String toString() {
+    if (value is UnimplementedError) return 'unimplemented';
+    return value;
+  }
+}
+
+class Err implements Result {
+  Err(this.error, this.stackTrace);
+
+  final Object error;
+  final StackTrace stackTrace;
+
+  @override
+  String toString() => error.toString();
+}
+
 extension SolveSolution on $Solution {
-  Future<void> solve() async {
-    await (
-      output1.writeAsString(await Future(part1).stringifyError()),
-      output2.writeAsString(await Future(part2).stringifyError()),
+  Future<(Result part1, Result part2)> solve() async {
+    final (p1, p2) = await (
+      Future(part1).wrapError(),
+      Future(part2).wrapError(),
     ).wait;
+
+    await (
+      output1.writeAsString(p1.toString()),
+      output2.writeAsString(p2.toString()),
+    ).wait;
+
+    print('Part 1: $p1');
+    print('Part 2: $p2');
+
+    return (p1, p2);
   }
 }
 
