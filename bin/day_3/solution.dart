@@ -11,10 +11,10 @@ class Solution extends $Solution {
   @override
   part1() {
     final matches = regex.allMatches(input.readAsStringSync());
+
     final array = matches
-        .map((e) => e.groups(const [1, 2]))
-        .map((e) => (int.parse(e[0]!), int.parse(e[1]!)))
-        .map((e) => e.$1 * e.$2);
+        .map((e) => e.groups(const [1, 2]).nonNulls.map(int.parse))
+        .map((e) => e.first * e.last);
 
     return array.sum.toString();
   }
@@ -35,10 +35,10 @@ class Solution extends $Solution {
     int result = 0;
     for (final section in safeSections) {
       final matches = regex.allMatches(section);
+
       final array = matches
-          .map((e) => e.groups(const [1, 2]))
-          .map((e) => (int.parse(e[0]!), int.parse(e[1]!)))
-          .map((e) => e.$1 * e.$2);
+          .map((e) => e.groups(const [1, 2]).nonNulls.map(int.parse))
+          .map((e) => e.first * e.last);
 
       result += array.sum;
     }
