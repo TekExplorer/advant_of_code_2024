@@ -25,10 +25,7 @@ class Ok implements Result {
   final String value;
 
   @override
-  String toString() {
-    if (value is UnimplementedError) return 'unimplemented';
-    return value;
-  }
+  String toString() => value;
 }
 
 class Err implements Result {
@@ -38,11 +35,28 @@ class Err implements Result {
   final StackTrace stackTrace;
 
   @override
-  String toString() => error.toString();
+  String toString() {
+    if (error is UnimplementedError) return 'unimplemented';
+    return error.toString();
+  }
+}
+
+extension on File {
+  Future<void> ensureExists() async {
+    if (!await exists()) await create();
+  }
 }
 
 extension SolveSolution on $Solution {
+  Future<void> ensureFilesExist() => (
+        input.ensureExists(),
+        output1.ensureExists(),
+        output2.ensureExists(),
+      ).wait;
+
   Future<(Result part1, Result part2)> solve() async {
+    await ensureFilesExist();
+
     final (p1, p2) = await (
       Future(part1).wrapError(),
       Future(part2).wrapError(),
