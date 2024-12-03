@@ -26,12 +26,11 @@ class Solution extends $Solution {
     final byDont = contents.split("don't()");
 
     final firstSection = byDont.removeAt(0);
-    byDont.removeWhere((e) => !e.contains('do()'));
-
     final safeSections = [firstSection];
+
     for (final section in byDont) {
       final doIndex = section.indexOf('do()');
-      safeSections.add(section.substring(doIndex));
+      if (doIndex != -1) safeSections.add(section.substring(doIndex));
     }
 
     int result = 0;
