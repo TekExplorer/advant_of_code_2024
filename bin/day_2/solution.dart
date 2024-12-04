@@ -36,7 +36,6 @@ extension on Iterable<int> {
 class Solution extends $Solution {
   @override
   part1() {
-    final lines = input.readAsLinesSync();
     final grid = lines.map((line) => line.split(' ').map(int.parse));
     int safeCount = 0;
     for (final line in grid) {
@@ -48,7 +47,6 @@ class Solution extends $Solution {
 
   @override
   part2() {
-    final lines = input.readAsLinesSync();
     final grid = lines.map((line) => line.split(' ').map(int.parse));
     int safeCount = 0;
     for (final $line in grid) {

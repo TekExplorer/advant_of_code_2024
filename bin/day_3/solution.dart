@@ -10,7 +10,7 @@ class Solution extends $Solution {
   static final regex = RegExp(r'mul\((\d+),(\d+)\)');
   @override
   part1() {
-    final matches = regex.allMatches(input.readAsStringSync());
+    final matches = regex.allMatches(contents);
 
     final array = matches
         .map((e) => e.groups(const [1, 2]).nonNulls.map(int.parse))
@@ -21,8 +21,6 @@ class Solution extends $Solution {
 
   @override
   part2() {
-    final contents = input.readAsStringSync();
-
     final [firstSection, ...byDont] = contents.split("don't()");
 
     final safeSections = [firstSection];

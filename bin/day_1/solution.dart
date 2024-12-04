@@ -6,11 +6,10 @@ Future<void> main() => Solution().solve();
 
 class Solution extends $Solution {
   (List<int>, List<int>) getLists() {
-    final contents = input.readAsLinesSync();
     final List<int> left = [];
     final List<int> right = [];
 
-    for (final line in contents) {
+    for (final line in lines) {
       final [l, r] = line.split(RegExp(r'\s+')).map(int.parse).toList();
       left.add(l);
       right.add(r);

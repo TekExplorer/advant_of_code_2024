@@ -5,9 +5,17 @@ import 'package:advent_of_code_2024/advent_of_code_2024.dart';
 Future<void> main() => Solution().solve();
 
 class Solution extends $Solution {
-  int checkXMASForPos(List<String> grid, int x, int y) {
+  String get(int x, int y) {
+    try {
+      return lines[x][y];
+    } catch (e) {
+      return '';
+    }
+  }
+
+  int checkXMASForPos(int x, int y) {
     // Dont operate unnecessarily
-    if (grid[x][y] != 'X') return 0;
+    if (lines[x][y] != 'X') return 0;
 
     // just... make a list of all the possible
     // combinations based off of this position
@@ -19,14 +27,6 @@ class Solution extends $Solution {
     final diagUpLeft = <String>[];
     final diagDownRight = <String>[];
     final diagDownLeft = <String>[];
-
-    String get(int x, int y) {
-      try {
-        return grid[x][y];
-      } catch (e) {
-        return '';
-      }
-    }
 
     for (var d in const [1, 2, 3]) {
       horizRight.add(get(x + d, y));
@@ -61,27 +61,18 @@ class Solution extends $Solution {
 
   @override
   part1() {
-    final grid = input.readAsLinesSync();
-
     int count = 0;
-    for (var x = 0; x < grid.length; x++) {
-      for (var y = 0; y < grid[x].length; y++) {
-        count += checkXMASForPos(grid, x, y);
+    for (var x = 0; x < lines.length; x++) {
+      for (var y = 0; y < lines[x].length; y++) {
+        count += checkXMASForPos(x, y);
       }
     }
 
     return count.toString();
   }
 
-  int checkCrossMASForPos(List<String> grid, int x, int y) {
-    if (grid[x][y] != 'A') return 0;
-    String get(int x, int y) {
-      try {
-        return grid[x][y];
-      } catch (e) {
-        return '';
-      }
-    }
+  int checkCrossMASForPos(int x, int y) {
+    if (lines[x][y] != 'A') return 0;
 
     int count = 0;
     if ([get(x - 1, y - 1), 'A', get(x + 1, y + 1)].join()
@@ -96,12 +87,10 @@ class Solution extends $Solution {
 
   @override
   part2() {
-    final grid = input.readAsLinesSync();
-
     int count = 0;
-    for (var x = 0; x < grid.length; x++) {
-      for (var y = 0; y < grid[x].length; y++) {
-        count += checkCrossMASForPos(grid, x, y);
+    for (var x = 0; x < lines.length; x++) {
+      for (var y = 0; y < lines[x].length; y++) {
+        count += checkCrossMASForPos(x, y);
       }
     }
 
