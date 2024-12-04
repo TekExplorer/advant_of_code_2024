@@ -28,7 +28,7 @@ class Solution extends $Solution {
       }
     }
 
-    for (var d in const [0, 1, 2, 3]) {
+    for (var d in const [1, 2, 3]) {
       horizRight.add(get(x + d, y));
       horizLeft.add(get(x - d, y));
       vertDown.add(get(x, y - d));
@@ -53,7 +53,7 @@ class Solution extends $Solution {
     int count = 0;
 
     for (final string in strings) {
-      if (string case 'XMAS') count++;
+      if (string case 'MAS') count++;
     }
 
     return count;
