@@ -53,7 +53,7 @@ class Solution extends $Solution {
     int count = 0;
 
     for (final string in strings) {
-      if (string case 'XMAS' || 'SAMX') count++;
+      if (string case 'XMAS') count++;
     }
 
     return count;
