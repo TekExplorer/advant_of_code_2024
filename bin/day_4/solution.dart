@@ -5,7 +5,7 @@ import 'package:advent_of_code_2024/advent_of_code_2024.dart';
 Future<void> main() => Solution().solve();
 
 class Solution extends $Solution {
-  int checkXMASForPos(List<List<String>> grid, int x, int y) {
+  int checkXMASForPos(List<String> grid, int x, int y) {
     // Dont operate unnecessarily
     if (grid[x][y] != 'X') return 0;
 
@@ -61,7 +61,7 @@ class Solution extends $Solution {
 
   @override
   part1() {
-    final grid = input.readAsLinesSync().map((e) => e.split('')).toList();
+    final grid = input.readAsLinesSync();
 
     int count = 0;
     for (var x = 0; x < grid.length; x++) {
@@ -73,7 +73,7 @@ class Solution extends $Solution {
     return count.toString();
   }
 
-  int checkCrossMASForPos(List<List<String>> grid, int x, int y) {
+  int checkCrossMASForPos(List<String> grid, int x, int y) {
     if (grid[x][y] != 'A') return 0;
     String get(int x, int y) {
       try {
@@ -96,7 +96,7 @@ class Solution extends $Solution {
 
   @override
   part2() {
-    final grid = input.readAsLinesSync().map((e) => e.split('')).toList();
+    final grid = input.readAsLinesSync();
 
     int count = 0;
     for (var x = 0; x < grid.length; x++) {
