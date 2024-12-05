@@ -13,6 +13,9 @@ extension<T> on List<T> {
   }
 }
 
+typedef Update = List<int>;
+typedef Rule = ({int low, int high});
+
 class Solution extends $Solution {
   String get contents => '''47|53
 97|13
@@ -46,9 +49,36 @@ class Solution extends $Solution {
   @override
   part1() {
     // final lines = LineSplitter().convert(contents);
+    final (:rules, :updates) = getRulesUpdates(lines);
 
-    final rules = <(int, int)>[];
-    final updates = <List<int>>[];
+    final validUpdates = <Update>[];
+
+    for (final update in updates) {
+      if (isValid(update, rules)) validUpdates.add(update);
+    }
+
+    return validUpdates.map((e) => e.middle).sum.toString();
+  }
+
+  bool isValid(Iterable<int> update, List<Rule> rules) {
+    return update.isSorted(ruleCompare(rules));
+  }
+
+  int Function(int value, int other) ruleCompare(List<Rule> rules) =>
+      (int value, int other) {
+        if (value == other) return 0;
+        if (rules.contains((high: other, low: value))) return -1;
+        if (rules.contains((low: other, high: value))) return 1;
+        // has no rule
+        return 0;
+      };
+
+  ({
+    List<Rule> rules,
+    List<Update> updates,
+  }) getRulesUpdates(List<String> lines) {
+    final rules = <Rule>[];
+    final updates = <Update>[];
 
     for (final line in lines) {
       if (line.isEmpty) continue;
@@ -56,89 +86,37 @@ class Solution extends $Solution {
       if (line.contains('|')) {
         final [left, right] = line.split('|').map(int.parse).toList();
 
-        rules.add((left, right));
+        rules.add((low: left, high: right));
       } else {
         updates.add(line.split(',').map(int.parse).toList());
       }
     }
-    final validUpdates = <List<int>>[...updates];
-
-    for (final update in updates) {
-      if (!isValid(update, rules)) {
-        validUpdates.remove(update);
-      }
-    }
-
-    return validUpdates.map((e) => e.middle).sum.toString();
-  }
-
-  bool isValid(Iterable<int> update, List<(int, int)> rules) {
-    for (final (index, value) in update.indexed) {
-      bool violated = rules
-          // where this value should be left of
-          .where((e) => e.$1 == value)
-          // if any value that should be to the right is found, its violated
-          .any((rule) => update.take(index).contains(rule.$2));
-      if (violated) return false;
-    }
-    return true;
+    return (rules: rules, updates: updates);
   }
 
   @override
   part2() {
     // final lines = LineSplitter().convert(contents);
 
-    final rules = <(int, int)>[];
-    final updates = <List<int>>[];
+    final (:rules, :updates) = getRulesUpdates(lines);
 
-    for (final line in lines) {
-      if (line.isEmpty) continue;
-
-      if (line.contains('|')) {
-        final [left, right] = line.split('|').map(int.parse).toList();
-
-        rules.add((left, right));
-      } else {
-        updates.add(line.split(',').map(int.parse).toList());
-      }
-    }
-    final validUpdates = <List<int>>[...updates];
-    final invalidUpdates = <List<int>>[];
+    final validUpdates = <Update>[];
+    final invalidUpdates = <Update>[];
 
     for (final update in updates) {
-      if (!isValid(update, rules)) {
-        validUpdates.remove(update);
+      if (isValid(update, rules)) {
+        validUpdates.add(update);
+      } else {
         invalidUpdates.add(update);
       }
     }
 
-    List<int> sortUpdate(List<int> update) {
+    Update sortUpdate(Update update) {
       final things = [...update];
-      things.sort((value, other) {
-        if (value == other) return 0;
-        if (rules.contains((value, other))) return -1;
-        if (rules.contains((other, value))) return 1;
-        // has no rule
-        return 0;
-      });
+      things.sort(ruleCompare(rules));
       return things;
     }
 
     return invalidUpdates.map(sortUpdate).map((e) => e.middle).sum.toString();
-  }
-}
-
-class Thing implements Comparable<Thing> {
-  Thing({required this.rules, required this.value});
-  final List<(int, int)> rules;
-  final int value;
-
-  @override
-  int compareTo(other) {
-    if (value == other.value) return 0;
-    if (rules.contains((value, other.value))) return -1;
-    if (rules.contains((other.value, value))) return 1;
-    // has no rule
-    return 0;
   }
 }
