@@ -115,10 +115,11 @@ class Solution extends $Solution {
   // 41
   // 6
 
-  // List<String> get lines => LineSplitter().convert(contents);
+  // Iterable<String> get lines => contents.lines;
+
   @override
   part1() {
-    final guard = GuardWalker(GridView(lines.map((e) => e.split('')).toList()));
+    final guard = GuardWalker(grid);
     guard.travel();
     return guard.numUniqueVisited.toString();
   }
@@ -143,6 +144,8 @@ class Solution extends $Solution {
   }
 }
 
+// could split into mutable and immutable extension types.
+// some other time perhaps.
 class GridView {
   GridView(this.grid);
   final List<List<String>> grid;
