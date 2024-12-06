@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import "package:path/path.dart" show posix;
+import 'package:path/path.dart' show posix;
+
+export 'dart:convert' show LineSplitter;
+
+export 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 extension on Future<String> {
   Future<_Result> wrapError() => then<_Result>(_Ok.new).onError(_Err.new);

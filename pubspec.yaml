@@ -9,6 +9,7 @@ environment:
 # Add regular dependencies here.
 dependencies:
   collection:
+  fast_immutable_collections: ^11.0.0
   more:
   path:
 
