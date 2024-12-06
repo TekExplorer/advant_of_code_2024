@@ -76,7 +76,7 @@ class Solution extends $Solution {
   ({
     List<Rule> rules,
     List<Update> updates,
-  }) getRulesUpdates(List<String> lines) {
+  }) getRulesUpdates(Iterable<String> lines) {
     final rules = <Rule>[];
     final updates = <Update>[];
 
