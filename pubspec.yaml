@@ -11,8 +11,9 @@ dependencies:
   collection:
   fast_immutable_collections: ^11.0.0
   meta: ^1.16.0
-  more:
+  more: ^4.4.0
   path:
+  trotter: ^2.2.0
 
 dev_dependencies:
   lints: ^4.0.0

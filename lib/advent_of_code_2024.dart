@@ -6,10 +6,11 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:path/path.dart' show posix;
 
 export 'package:fast_immutable_collections/fast_immutable_collections.dart';
+export 'package:more/more.dart' hide IndexedIterableExtension;
+export 'package:trotter/trotter.dart';
 
 extension StringLines on String {
   Iterable<String> get lines => LineSplitter.split(this);
-  IList<String> get iLines => lines.toIList();
 }
 
 extension on Future<Object> {
@@ -26,7 +27,6 @@ final _relativeDir = posix.relative(
 final _input = File(posix.join(_relativeDir, 'input.txt'));
 
 final _contents = _input.readAsStringSync();
-final _lines = LineSplitter.split(_contents).toIList();
 
 final _output1 = File(posix.join(_relativeDir, 'output1.txt'));
 final _output2 = File(posix.join(_relativeDir, 'output2.txt'));
@@ -86,7 +86,7 @@ extension SolveSolution on $Solution {
     return (p1, p2);
   }
 
-  IList<String> get lines => _lines;
+  IList<String> get lines => _contents.lines.toIList();
   String get contents => _contents;
 }
 
