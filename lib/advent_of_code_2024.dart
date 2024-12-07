@@ -12,7 +12,7 @@ extension StringLines on String {
   IList<String> get iLines => lines.toIList();
 }
 
-extension on Future<String> {
+extension on Future<Object> {
   Future<_Result> wrapError() => then<_Result>(_Ok.new).onError(_Err.new);
 }
 
@@ -35,10 +35,10 @@ sealed class _Result {}
 
 class _Ok implements _Result {
   _Ok(this.value);
-  final String value;
+  final Object value;
 
   @override
-  String toString() => value;
+  String toString() => value.toString();
 }
 
 class _Err implements _Result {
@@ -91,6 +91,6 @@ extension SolveSolution on $Solution {
 }
 
 abstract class $Solution {
-  FutureOr<String> part1();
-  FutureOr<String> part2();
+  FutureOr<Object> part1();
+  FutureOr<Object> part2();
 }

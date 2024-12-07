@@ -68,7 +68,7 @@ class Solution extends $Solution {
       }
     }
 
-    return count.toString();
+    return count;
   }
 
   int checkCrossMASForPos(int x, int y) {
@@ -94,6 +94,6 @@ class Solution extends $Solution {
       }
     }
 
-    return count.toString();
+    return count;
   }
 }

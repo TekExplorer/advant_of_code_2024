@@ -57,7 +57,7 @@ class Solution extends $Solution {
       if (isValid(update, rules)) validUpdates.add(update);
     }
 
-    return validUpdates.map((e) => e.middle).sum.toString();
+    return validUpdates.map((e) => e.middle).sum;
   }
 
   bool isValid(Iterable<int> update, List<Rule> rules) {
@@ -117,6 +117,6 @@ class Solution extends $Solution {
       return things;
     }
 
-    return invalidUpdates.map(sortUpdate).map((e) => e.middle).sum.toString();
+    return invalidUpdates.map(sortUpdate).map((e) => e.middle).sum;
   }
 }

@@ -121,7 +121,7 @@ class Solution extends $Solution {
   part1() {
     final guard = GuardWalker(grid);
     guard.travel();
-    return guard.numUniqueVisited.toString();
+    return guard.numUniqueVisited;
   }
 
   late GridView grid = GridView(lines.map((e) => e.split('')).toList());
@@ -140,7 +140,7 @@ class Solution extends $Solution {
       }
     }
 
-    return numGridsThatLoop.toString();
+    return numGridsThatLoop;
   }
 }
 

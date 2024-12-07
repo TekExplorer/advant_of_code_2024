@@ -16,7 +16,7 @@ class Solution extends $Solution {
         .map((e) => e.groups(const [1, 2]).nonNulls.map(int.parse))
         .map((e) => e.first * e.last);
 
-    return array.sum.toString();
+    return array.sum;
   }
 
   @override
@@ -41,6 +41,6 @@ class Solution extends $Solution {
       result += array.sum;
     }
 
-    return result.toString();
+    return result;
   }
 }

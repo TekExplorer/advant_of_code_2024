@@ -42,7 +42,7 @@ class Solution extends $Solution {
       if (line.isSafe()) safeCount++;
     }
 
-    return safeCount.toString();
+    return safeCount;
   }
 
   @override
@@ -58,6 +58,6 @@ class Solution extends $Solution {
       }
     }
 
-    return safeCount.toString();
+    return safeCount;
   }
 }

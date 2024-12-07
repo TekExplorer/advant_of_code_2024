@@ -30,7 +30,7 @@ class Solution extends $Solution {
       distance += diff;
     }
 
-    return distance.toString();
+    return distance;
   }
 
   @override
@@ -48,6 +48,6 @@ class Solution extends $Solution {
     for (final int i in left) {
       similarityScore += (i * (timesFoundInRight[i] ?? 0));
     }
-    return similarityScore.toString();
+    return similarityScore;
   }
 }
