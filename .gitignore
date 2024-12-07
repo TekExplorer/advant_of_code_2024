@@ -3,4 +3,3 @@
 .dart_tool/
 
 **/**/*.txt
-!**/day_n/*.txt
