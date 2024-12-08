@@ -42,7 +42,7 @@ class Solution extends $Solution {
 
   Set<Pos> antinodesOf(Positions positions) {
     final antinodes = <Pos>{};
-    for (final [a, b] in positions.combinations(2)) {
+    for (final [a, b] in positions.permutations(2)) {
       final [l, r] = antinodesFor(a, b);
       antinodes.add(l);
       antinodes.add(r);
