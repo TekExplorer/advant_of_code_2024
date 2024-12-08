@@ -66,8 +66,8 @@ extension SolveSolution on $Solution {
   Future<void> solveExample() async {
     final input = example.contents;
     final (p1, p2) = await (
-      Future(() => part1(input)),
-      Future(() => part2(input)),
+      Future(() => part1(input)).onError<Object>((e, __) => e),
+      Future(() => part2(input)).onError<Object>((e, __) => e),
     ).wait;
     final (p1a, p2a) = (example.part1, example.part2);
     print('Example');
@@ -86,9 +86,10 @@ extension SolveSolution on $Solution {
 
   Future<void> solveActual() async {
     final input = Input();
+    if (input.content.isEmpty) return;
     final (p1, p2) = await (
-      Future(() => part1(input)),
-      Future(() => part2(input)),
+      Future(() => part1(input)).onError<Object>((e, __) => e),
+      Future(() => part2(input)).onError<Object>((e, __) => e),
     ).wait;
     print('Solution');
     print('\tPart 1: $p1');
