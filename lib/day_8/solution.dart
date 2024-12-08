@@ -109,6 +109,7 @@ class Solution extends $Solution {
     final antinodes = allAntinodesOf(positions).where((node) {
       return isConstrainedBy(node, (width: width, height: height));
     });
+
     assert(() {
       try {
         for (final node in antinodes) {
@@ -161,7 +162,7 @@ class Solution extends $Solution {
     final set = HashSet<Pos>();
     for (final pos in positions.values) {
       set.addAll([
-        for (final [a, b] in pos.combinations(2))
+        for (final [a, b] in pos.permutations(2))
           ...infinitePossibleAntinodes(a, b, constraints: constraints)
       ]);
     }
