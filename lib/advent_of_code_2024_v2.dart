@@ -1,36 +1,14 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:advent_of_code_2024/files.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
+import 'input.dart';
 
 export 'package:fast_immutable_collections/fast_immutable_collections.dart';
 export 'package:more/more.dart' hide IndexedIterableExtension;
 export 'package:trotter/trotter.dart';
 
-class Input {
-  late final String content = inputContents;
-  late final IList<String> lines = input.readAsLinesSync().lock;
-  Stream<String> get linesStream =>
-      input.openRead().map(utf8.decode).transform(LineSplitter());
-  // possibly add more methods
-}
-
-class ExampleInput implements Input {
-  ExampleInput(this.content);
-
-  @override
-  final String content;
-
-  @override
-  late IList<String> lines = LineSplitter.split(content).toIList();
-
-  @override
-  Stream<String> get linesStream =>
-      Stream.fromIterable(LineSplitter.split(content));
-}
-
-//
+export 'input.dart';
 
 abstract class $Solution {
   Example get example;
