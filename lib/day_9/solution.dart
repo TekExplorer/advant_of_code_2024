@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:advent_of_code_2024/advent_of_code_2024_v2.dart';
 import 'package:collection/collection.dart';
 
@@ -40,6 +38,7 @@ class Solution extends $Solution {
   // disk map
   @override
   get example => Example(part1: 1928, part2: 2858, '2333133121414131402');
+  // get example => Example(part1: 165, part2: 165, '1910101010101010101');
 
   Iterable<Part> decode(String diskMap) sync* {
     bool isBlock = true;
