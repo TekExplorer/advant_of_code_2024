@@ -15,9 +15,14 @@ extension type const Char._(String char) {
   }
 
   factory Char.decode(int encoded) => Char(ascii.decode([encoded]));
+
   bool get isEmpty => char.isEmpty;
   bool get isDot => this == dot;
 
+  int? toInt() => int.tryParse(char);
+}
+
+extension CharASCIIEncoder on Char {
   int encode() {
     if (isEmpty) throw UnsupportedError('this Char is empty');
     return ascii.encode(char).single;

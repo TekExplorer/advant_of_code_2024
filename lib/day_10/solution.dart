@@ -124,10 +124,6 @@ extension on Grid {
   }
 }
 
-extension on Char {
-  int? toInt() => int.tryParse(char);
-}
-
 enum Direction {
   up,
   down,
