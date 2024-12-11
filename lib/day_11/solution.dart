@@ -88,18 +88,18 @@ extension on Iterable<int> {
   }
 }
 
-extension on Map<int, int> {
-  List<int> toExpandedList() {
-    final list = <int>[];
-    for (final entry in entries) {
-      for (final _ in Iterable.generate(entry.value)) {
-        list.add(entry.key);
-      }
-    }
-    return list;
-  }
+// extension on Map<int, int> {
+//   List<int> toExpandedList() {
+//     final list = <int>[];
+//     for (final entry in entries) {
+//       for (final _ in Iterable.generate(entry.value)) {
+//         list.add(entry.key);
+//       }
+//     }
+//     return list;
+//   }
 
-  void display() {
-    print(toExpandedList().join(' '));
-  }
-}
+//   void display() {
+//     print(toExpandedList().join(' '));
+//   }
+// }
