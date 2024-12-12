@@ -74,3 +74,7 @@ extension SolveSolution on $Solution {
     print('\tPart 2: $p2');
   }
 }
+
+extension MapKV<K, V> on Map<K, V> {
+  Iterable<(K, V)> get kv => entries.map((e) => (e.key, e.value));
+}

@@ -95,6 +95,19 @@ class Grid {
     }
     return buffer.toString();
   }
+
+  Iterable<XY> get positions sync* {
+    // for (final y in Iterable<int>.generate(height)) {
+    //   for (final x in Iterable<int>.generate(width)) {
+    //     yield (x: x, y: y);
+    //   }
+    // }
+    for (var y = 0; y < height; y++) {
+      for (var x = 0; x < width; x++) {
+        yield (x: x, y: y);
+      }
+    }
+  }
 }
 
 extension type Line(Uint8List _line) {
