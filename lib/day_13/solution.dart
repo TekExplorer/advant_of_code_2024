@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:advent_of_code_2024/advent_of_code_2024_v2.dart';
 import 'package:collection/collection.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 Future<void> main() => Solution().solve();
 // Future<void> main() => Solution().solveExample();
@@ -30,12 +31,29 @@ Prize: X=18641, Y=10279
   @override
   part1(Input input) {
     final games = input.games;
-    print(games.join('\n\n'));
-    return games.map((e) => e.bruteForceSolve()).nonNulls.sum;
+    // print(games.join('\n\n'));
+    // return games.map((e) => e.bruteForceSolve()).nonNulls.sum; // part 1 attempt. it DID work.
+    return games.map((e) => e.solveByMatrix()).nonNulls.sum;
   }
 
   @override
-  part2(Input input) => 0;
+  part2(Input input) {
+    final games = input.games;
+    // print(games.join('\n\n'));
+    // for (final game in games) {
+    //   final matrix = game.solveByMatrix();
+    //   print(matrix);
+    // }
+    final gamesWithTwist = games.map((e) => Game(
+          e.buttonA,
+          e.buttonB,
+          Prize(
+            x: e.prize.x + twist,
+            y: e.prize.y + twist,
+          ),
+        ));
+    return gamesWithTwist.map((e) => e.solveByMatrix()).nonNulls.sum;
+  }
 }
 
 extension on Input {
@@ -117,7 +135,14 @@ class Game {
 
     return true;
   }
+
+  // x() {
+  //   '${buttonA.dx}A + ${buttonB.dx}B = ${prize.x}';
+  //   '${buttonA.dy}A + ${buttonB.dy}B = ${prize.y}';
+  // }
 }
+
+const twist = 10_000_000_000_000;
 
 // button limit is 100 each for pt1
 extension BruteForce on Game {
@@ -135,6 +160,34 @@ extension BruteForce on Game {
         yield (aPresses: aPresses, bPresses: bPresses);
       }
     }
+  }
+}
+
+extension on Game {
+  // '${buttonA.dx}A + ${buttonB.dx}B = ${prize.x}';
+  // '${buttonA.dy}A + ${buttonB.dy}B = ${prize.y}';
+
+  // aX+bY=c
+
+  int? solveByMatrix() {
+    final x = Vector2.zero();
+    {
+      final A = Matrix2.zero()
+        ..row0 = Vector2(buttonA.dx.toDouble(), buttonB.dx.toDouble())
+        ..row1 = Vector2(buttonA.dy.toDouble(), buttonB.dy.toDouble());
+
+      final b = Vector2(
+        prize.x.toDouble(),
+        prize.y.toDouble(),
+      );
+      Matrix2.solve(A, x, b);
+    }
+    // round for floating point precision issues.
+    final a = x.x.round();
+    final b = x.y.round();
+    // lets make sure its an actual solution
+    if (!isValid((aPresses: a, bPresses: b))) return null;
+    return (a * 3) + b;
   }
 }
 
