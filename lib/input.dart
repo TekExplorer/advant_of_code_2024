@@ -12,6 +12,8 @@ class Input {
   // possibly add more methods
 
   Grid get grid => Grid.of(content);
+
+  bool get isExample => false;
 }
 
 class ExampleInput implements Input {
@@ -28,4 +30,6 @@ class ExampleInput implements Input {
       Stream.fromIterable(LineSplitter.split(content));
   @override
   Grid get grid => Grid.of(content);
+  @override
+  bool get isExample => true;
 }
