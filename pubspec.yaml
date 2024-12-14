@@ -10,6 +10,7 @@ environment:
 dependencies:
   collection:
   fast_immutable_collections: ^11.0.0
+  image: ^4.4.0
   meta: ^1.16.0
   more: ^4.4.0
   path:
