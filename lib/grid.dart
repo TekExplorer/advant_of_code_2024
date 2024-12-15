@@ -53,6 +53,26 @@ class Grid {
     return dxForY + pos.x;
   }
 
+  XY _posOfIndex(int index) {
+    final y = index ~/ width;
+    final x = index % width;
+    return (x: x, y: y);
+  }
+
+  XY? posOf(Char char) {
+    final index = _grid.indexOf(char.encode());
+    if (index == -1) return null;
+    return _posOfIndex(index);
+  }
+
+  Iterable<XY> allPosOf(Char char) sync* {
+    for (var i = 0; i < _grid.length; i++) {
+      if (Char.decode(_grid[i]) == char) {
+        yield _posOfIndex(i);
+      }
+    }
+  }
+
   bool _isValidPos(XY pos) {
     if (pos.x >= width || pos.y >= height || pos.x < 0 || pos.y < 0) {
       return false;
@@ -85,6 +105,8 @@ class Grid {
     }
   }
 
+  @override
+  String toString() => source;
   String get source {
     final buffer = StringBuffer();
     for (final line in lines) {
@@ -108,6 +130,16 @@ class Grid {
       }
     }
   }
+
+  Grid clone() => Grid._(Uint8List.fromList(_grid), width);
+  void setAllRaw(Iterable<int> raw) {
+    if (raw.length != _grid.length) {
+      throw ArgumentError('raw must have the same length as the grid');
+    }
+    _grid.setAll(0, raw);
+  }
+
+  void setFrom(Grid other) => setAllRaw(other._grid);
 }
 
 extension type Line(Uint8List _line) {
