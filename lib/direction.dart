@@ -28,3 +28,38 @@ enum Direction {
         Direction.right => left,
       };
 }
+
+enum Diagonal {
+  upLeft,
+  upRight,
+  downLeft,
+  downRight;
+
+  Set<Direction> get parts => switch (this) {
+        Diagonal.upLeft => {Direction.up, Direction.left},
+        Diagonal.upRight => {Direction.up, Direction.right},
+        Diagonal.downLeft => {Direction.down, Direction.left},
+        Diagonal.downRight => {Direction.down, Direction.right},
+      };
+
+  XY modify(XY pos) => switch (this) {
+        Diagonal.upLeft => (x: pos.x - 1, y: pos.y - 1),
+        Diagonal.upRight => (x: pos.x + 1, y: pos.y - 1),
+        Diagonal.downLeft => (x: pos.x - 1, y: pos.y + 1),
+        Diagonal.downRight => (x: pos.x + 1, y: pos.y + 1),
+      };
+
+  Diagonal get rotated90 => switch (this) {
+        Diagonal.upLeft => downLeft,
+        Diagonal.upRight => upLeft,
+        Diagonal.downLeft => downRight,
+        Diagonal.downRight => upRight,
+      };
+  Diagonal operator -() => opposite;
+  Diagonal get opposite => switch (this) {
+        Diagonal.upLeft => downRight,
+        Diagonal.upRight => downLeft,
+        Diagonal.downLeft => upRight,
+        Diagonal.downRight => upLeft,
+      };
+}
