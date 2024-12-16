@@ -21,7 +21,7 @@ sealed class CompassDirection implements Comparable<CompassDirection> {
   static const downLeft = Diagonal.downLeft;
   static const left = Direction.left;
   static const upLeft = Diagonal.upLeft;
-  static const values = [
+  static const values = <CompassDirection>[
     up,
     upRight,
     right,
@@ -59,6 +59,10 @@ enum Direction implements CompassDirection {
         Direction.left => up,
         Direction.right => down,
       };
+  Direction get rotatedRight => rotated90;
+
+  Direction get rotated270 => -rotated90;
+  Direction get rotatedLeft => rotated270;
 
   Direction operator -() => opposite;
   Direction get opposite => switch (this) {
@@ -95,13 +99,13 @@ enum Direction implements CompassDirection {
 }
 
 extension XYDirection on XY {
-  XY shift(CompassDirection direction, [int times = 1]) =>
+  XY modify(CompassDirection direction, [int times = 1]) =>
       direction.modify(this, times);
 
-  XY up([int times = 1]) => shift(Direction.up, times);
-  XY down([int times = 1]) => shift(Direction.down, times);
-  XY left([int times = 1]) => shift(Direction.left, times);
-  XY right([int times = 1]) => shift(Direction.right, times);
+  XY up([int times = 1]) => modify(Direction.up, times);
+  XY down([int times = 1]) => modify(Direction.down, times);
+  XY left([int times = 1]) => modify(Direction.left, times);
+  XY right([int times = 1]) => modify(Direction.right, times);
 
   XY upLeft([int times = 1]) => up(times).left(times);
   XY upRight([int times = 1]) => up(times).right(times);

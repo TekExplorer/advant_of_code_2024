@@ -230,15 +230,15 @@ extension type _Part2Grid(Grid _) implements Grid {
     bool moveBox() {
       this[boxLeft] = Char.dot;
       this[boxRight] = Char.dot;
-      this[boxLeft.shift(direction)] = Char('[');
-      this[boxRight.shift(direction)] = Char(']');
+      this[boxLeft.modify(direction)] = Char('[');
+      this[boxRight.modify(direction)] = Char(']');
       return true;
     }
 
     switch (direction) {
       case Direction.up || Direction.down:
-        final leftTarget = boxLeft.shift(direction);
-        final rightTarget = boxRight.shift(direction);
+        final leftTarget = boxLeft.modify(direction);
+        final rightTarget = boxRight.modify(direction);
         final atLeft = this[leftTarget];
         final atRight = this[rightTarget];
         if (atLeft.isWall || atRight.isWall) return false;
