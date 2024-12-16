@@ -223,8 +223,8 @@ extension type _Part2Grid(Grid _) implements Grid {
     final thisBoxHalf = this[box];
     if (thisBoxHalf.isDot) debugger();
     final (boxLeft, boxRight) = switch (thisBoxHalf) {
-      '[' => (box, box.right),
-      ']' => (box.left, box),
+      '[' => (box, box.right()),
+      ']' => (box.left(), box),
       _ => throw StateError('Invalid box: $thisBoxHalf at $box'),
     };
     bool moveBox() {
@@ -253,7 +253,7 @@ extension type _Part2Grid(Grid _) implements Grid {
 
         return moveBox();
       case Direction.left:
-        final target = boxLeft.left;
+        final target = boxLeft.left();
         final atTarget = this[target];
         if (atTarget.isWall) return false;
         if (atTarget.isWideBox) {
@@ -262,7 +262,7 @@ extension type _Part2Grid(Grid _) implements Grid {
 
         return moveBox();
       case Direction.right:
-        final target = boxRight.right;
+        final target = boxRight.right();
         final atTarget = this[target];
         if (atTarget.isWall) return false;
         if (atTarget.isWideBox) {
