@@ -5,7 +5,6 @@ import 'package:advent_of_code_2024/advent_of_code_2024_v2.dart';
 import 'package:advent_of_code_2024/files.dart';
 import 'package:advent_of_code_2024/grid.dart';
 import 'package:image/image.dart';
-import 'package:path/path.dart';
 
 import '../direction.dart';
 
@@ -111,7 +110,7 @@ void writeBotsImg(Iterable<Robot> robots, File file, Constraints constraints) {
   file.writeAsBytesSync(data);
 }
 
-File out(int count) => File(posix.join(relativeDir, 'outputs', '$count.png'));
+File out(int count) => outputs.file('$count.png');
 
 extension type Quadrant(Iterable<Robot> _) implements Iterable<Robot> {}
 typedef Constraints = ({int height, int width});
