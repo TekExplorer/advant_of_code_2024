@@ -5,9 +5,9 @@ import 'package:advent_of_code_2024/direction.dart';
 import 'package:advent_of_code_2024/grid.dart';
 
 // Future<void> main() => Solution().solve();
-// Future<void> main() => Solution().solveExample();
-Future<void> main() => Solution().solveActual();
-var shouldDisplay = false;
+Future<void> main() => Solution().solveExample();
+// Future<void> main() => Solution().solveActual();
+var shouldDisplay = true;
 
 class Solution extends $Solution {
   get example1 => Example(part1: 7036, part2: 0, '''
@@ -54,7 +54,7 @@ class Solution extends $Solution {
   @override
   part1(Input input) {
     final puzzle = input.puzzle();
-    return puzzle.cheapestPath.actions.cost;
+    return puzzle.cheapestPath.cost;
   }
 
   @override
@@ -73,7 +73,7 @@ extension on Input {
 
 typedef Path = ({ISet<XY> visited, IList<Action> actions});
 
-extension on IList<Action> {
+extension on Iterable<Action> {
   int get cost {
     var cost = 0;
     for (final action in this) {
@@ -89,9 +89,13 @@ class _Part1Grid {
   XY get posOfStart => grid.posOf(Char('S'))!;
   XY get posOfEnd => grid.posOf(Char('E'))!;
 
-  Path get cheapestPath => allPossiblePaths.reduce(
-        (a, b) => a.actions.cost < b.actions.cost ? a : b,
-      );
+  Iterable<Action> get cheapestPath {
+    return allPossibleRoutes.map((route) {
+      final actions = route.chained(start: posOfStart).actions(posOfStart);
+      return actions;
+    }).reduce((a, b) => a.cost < b.cost ? a : b);
+  }
+
   void display(Iterable<Action> actions) {
     if (!shouldDisplay) return;
 
@@ -125,77 +129,110 @@ class _Part1Grid {
 
   late final allEmptyPositions = grid.allPosOf(Char.dot).toISet();
 
-  Iterable<Path> get allPossiblePaths {
-    return _allPossiblePaths(
-      posOfStart,
-      ISet(),
-      IList(),
-      Direction.right, // east
-      false,
-      0,
-    );
-  }
-
-  Iterable<Path> _allPossiblePaths(
-    XY current,
-    ISet<XY> visited,
-    IList<Action> actions,
-    Direction facing,
-    bool didTurn,
-    int depth,
-  ) sync* {
+  Iterable<ISet<XY>> get allPossibleRoutes => _calculatePossibleRoutes(
+        current: posOfStart,
+        visited: ISet(),
+        depth: 0,
+      );
+  Iterable<ISet<XY>> _calculatePossibleRoutes({
+    required XY current,
+    required ISet<XY> visited,
+    required int depth,
+  }) sync* {
     final validPositions = allEmptyPositions.difference(visited);
 
-    if (shouldDisplay) print(actions.map((e) => e.name).join(' '));
-    display(actions);
+    if (shouldDisplay) {
+      final grid = this.grid.clone();
+      for (final pos in visited) {
+        grid[pos] = Char('+');
+      }
+      print(grid);
+    }
 
-    final forward = facing.modify(current);
-    if (forward == posOfEnd) {
-      yield (actions: actions.add(Action.forward), visited: visited);
+    if (validPositions.isEmpty) {
       return;
     }
-    if (validPositions.contains(forward)) {
-      final forwardPaths = _allPossiblePaths(
-        forward,
-        visited.add(current),
-        actions.add(Action.forward),
-        facing,
-        false,
-        depth + 1,
-      );
-      yield* forwardPaths;
-    }
 
-    if (didTurn) {
-      assert(actions.last.isTurn);
-      return;
-    }
-    assert(!visited.contains(current));
-
-    final right = facing.rotatedRight.modify(current);
-    if (validPositions.contains(right)) {
-      final rightPaths = _allPossiblePaths(
-        current,
-        visited,
-        actions.add(Action.turnRight),
-        facing.rotatedRight,
-        true,
-        depth + 1,
+    for (final next in Direction.values.map((e) => e.modify(current))) {
+      if (next == posOfEnd) {
+        var path = visited.add(current).add(next);
+        if (shouldDisplay) {
+          display(path.chained(start: posOfStart).actions(posOfStart));
+          print(
+              'Cost: ${path.chained(start: posOfStart).actions(posOfStart).cost}');
+          print('Cost: ${path.actions(posOfStart).cost}');
+        }
+        yield path;
+        continue;
+      }
+      if (!validPositions.contains(next)) continue;
+      yield* _calculatePossibleRoutes(
+        current: next,
+        visited: visited.add(current),
+        depth: depth + 1,
       );
-      yield* rightPaths;
     }
+  }
+}
 
-    final left = facing.rotatedLeft.modify(current);
-    if (validPositions.contains(left)) {
-      final leftPaths = _allPossiblePaths(
-        current,
-        visited,
-        actions.add(Action.turnLeft),
-        facing.rotatedLeft,
-        true,
-        depth + 1,
-      );
-      yield* leftPaths;
+extension on Iterable<XY> {
+  Iterable<Action> actions(XY start) sync* {
+    var current = start;
+    var facing = Direction.right;
+    for (final next in this) {
+      if (!current.isAdjacentTo(next) && current != start) {
+        throw StateError('Not a neighbor. consider sorting?');
+      }
+      final direction = current.directionToAdjacentPos(next);
+      if (direction == facing) {
+        yield Action.forward;
+      } else {
+        if (facing.rotated90 == direction) {
+          yield Action.turnRight;
+        } else if (facing.rotated270 == direction) {
+          yield Action.turnLeft;
+        } else {
+          throw StateError('Invalid direction');
+        }
+        yield Action.forward;
+      }
+    }
+  }
+
+  Iterable<XY> chained({required XY start}) sync* {
+    if (!contains(start)) throw ArgumentError('Start not in list');
+
+    var list = toIList().remove(start);
+    var current = start;
+    yield current;
+    while (list.isNotEmpty) {
+      final next = list.firstWhere((e) => current.isNeighborTo(e), orElse: () {
+        throw StateError(
+          'No neighbor found. Is not connected.'
+          ' Current: $current Remaining: $list',
+        );
+      });
+      yield current;
+      current = next;
+      list = list.remove(current);
+    }
+  }
+}
+
+extension on XY {
+  bool isAdjacentTo(XY other) => (x - other.x).abs() + (y - other.y).abs() == 1;
+  bool isDiagonalTo(XY other) =>
+      (x - other.x).abs() == 1 && (y - other.y).abs() == 1;
+
+  bool isNeighborTo(XY other) => isAdjacentTo(other) || isDiagonalTo(other);
+
+  Direction directionToAdjacentPos(XY other) {
+    if (x == other.x) {
+      return y < other.y ? Direction.down : Direction.up;
+    } else if (y == other.y) {
+      return x < other.x ? Direction.right : Direction.left;
+    } else {
+      throw ArgumentError('Not a neighbor');
     }
   }
 }
