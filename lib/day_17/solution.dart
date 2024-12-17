@@ -208,7 +208,7 @@ Program: ${program.join(',')}
         run();
         if (output.endsWith(target)) {
           print('Found it at $value');
-          print('Found it at ${value.toRadixString(2)}');
+          print('Found it at ${value.humanFriendlyBinary}');
           print('Output: $output');
           valueStr = local;
           window++;
@@ -218,6 +218,16 @@ Program: ${program.join(',')}
       assert((valueStr.length / 3) == window - 1);
     }
     return int.parse(valueStr, radix: 2);
+  }
+}
+
+extension on int {
+  String get humanFriendlyBinary {
+    final string = toRadixString(2);
+    final length = string.length;
+    assert(length % 3 == 0);
+    final parts = string.split('').window(3, step: 3).map((e) => e.join());
+    return parts.join(' ');
   }
 }
 
